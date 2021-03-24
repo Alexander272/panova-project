@@ -60,21 +60,21 @@ export const HomePage = () => {
     }, [])
 
     const calculateHandler = () => {
-        const salary = (+employes[index].salary * +count) / countWorkingDays
-        const award =
+        const fullSalary = (+employes[index].salary * +count) / countWorkingDays
+        const fullAward =
             +count === countWorkingDays
-                ? salary * (+employes[index].award / 100)
+                ? fullSalary * (+employes[index].award / 100)
                 : +count >= countWorkingDays * 0.9
-                ? salary * (+employes[index].award / 200)
+                ? fullSalary * (+employes[index].award / 200)
                 : 0
         setCalc({
-            salary: salary - salary * 0.13,
-            award: award - award * 0.13,
-            NDFL: salary * 0.13 + award * 0.13,
-            pension: salary * 0.22,
-            medical: salary * 0.051,
-            social: salary * 0.029,
-            FSS: salary * 0.002,
+            salary: fullSalary - fullSalary * 0.13,
+            award: fullAward - fullAward * 0.13,
+            NDFL: fullSalary * 0.13 + fullAward * 0.13,
+            pension: fullSalary * 0.22 + fullAward * 0.22,
+            medical: fullSalary * 0.051 + fullAward * 0.051,
+            social: fullSalary * 0.029 + fullAward * 0.029,
+            FSS: fullSalary * 0.002 + fullAward * 0.002,
         })
     }
 
