@@ -1,0 +1,89 @@
+.form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btns {
+    position: relative;
+    margin-bottom: 30px;
+    height: 30px;
+    width: 100%;
+}
+.btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    border-radius: 50px;
+    font-size: 1.2em;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 30;
+
+    &:hover {
+        z-index: 40;
+
+        .btnText {
+            width: 240px;
+        }
+    }
+}
+.addBtn {
+    right: 65px;
+    background-color: #0050c7;
+    color: #fff;
+}
+.editBtn {
+    right: 5px;
+    background-color: #0050c7;
+    color: #fff;
+}
+.icon {
+    font-size: 1.5em;
+    font-weight: bold;
+    pointer-events: none;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.addIcon {
+    // margin: 3px 12px;
+}
+.editIcon {
+    font-size: 1.2em;
+    // margin: 3px 9px;
+    transform: translateY(-2px);
+}
+.btnText {
+    width: 0px;
+    pointer-events: none;
+    margin-top: -3px;
+    transition: all 0.5s ease-in-out;
+    white-space: nowrap;
+}
+
+.container {
+    margin: 0 auto;
+    margin-bottom: 30px;
+    width: 70%;
+}
+
+.info {
+    margin: 20px 0;
+}
+.infoText {
+    font-size: 1.1em;
+    letter-spacing: 1.2px;
+}
+.infoBold {
+    margin-left: 10px;
+    font-weight: bold;
+}

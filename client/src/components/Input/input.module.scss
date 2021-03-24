@@ -1,0 +1,70 @@
+.field {
+    position: relative;
+    width: 90%;
+}
+
+.label {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #000;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #000;
+    outline: none;
+    background: transparent;
+    box-sizing: border-box;
+
+    &:focus,
+    &:valid {
+        border-bottom-color: #0050c7;
+    }
+}
+
+.input:focus ~ label,
+.input:valid ~ label {
+    top: -20px;
+    left: 0;
+    color: #0050c7;
+    font-size: 12px;
+}
+
+.stand {
+    display: flex;
+    flex-direction: column;
+    .input {
+        border: 1px solid #000;
+        border-radius: 24px;
+        padding: 10px 25px;
+        margin-bottom: 15px;
+
+        &:focus,
+        &:valid {
+            border-color: #0050c7;
+        }
+    }
+
+    .input:focus ~ label,
+    .input:valid ~ label {
+        top: 0px;
+        left: 10px;
+        color: #0050c7;
+        font-size: 16px;
+    }
+
+    .label {
+        order: -1;
+        position: relative;
+    }
+}
