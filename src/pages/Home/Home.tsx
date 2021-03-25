@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { Button } from '../../components/Button/Button'
 import { DropdownList } from '../../components/DropdownList/DropdownList'
-import classes from './home.module.scss'
-import { data } from '../data'
 import { Input } from '../../components/Input/Input'
+import { EmploeysType } from '../../types/employes'
+import classes from './home.module.scss'
+// import { data } from '../data'
 
 function isWeekday(date: Date) {
     const day = date.getDay()
@@ -43,21 +44,29 @@ const initState = {
 export const HomePage = () => {
     const history = useHistory()
     const [open, setOpen] = useState(false)
-    const [employes, setEmployes] = useState(data)
+    const [employes, setEmployes] = useState<EmploeysType[]>([])
+    const [employesIds, setEmployesIds] = useState<string[]>([])
     const [index, setIndex] = useState(0)
     const [countWorkingDays, setCountWorkingDays] = useState(0)
     const [count, setCount] = useState('')
     const [calc, setCalc] = useState(initState)
 
+    const fetchEmployes = useCallback(async () => {
+        const res = await fetch('https://alex-js.firebaseio.com/emploeys.json')
+        const data = await res.json()
+        setEmployes(Object.values(data))
+        setEmployesIds(Object.keys(data))
+    }, [])
+
     useEffect(() => {
-        setEmployes(data)
+        fetchEmployes()
         const date = new Date(Date.now())
         const workingDays = getWeekdaysInMonth(
             date.getMonth(),
             date.getFullYear()
         )
         setCountWorkingDays(workingDays.length)
-    }, [])
+    }, [fetchEmployes])
 
     const calculateHandler = () => {
         const fullSalary = (+employes[index].salary * +count) / countWorkingDays
@@ -133,10 +142,11 @@ export const HomePage = () => {
                     </p>
                 </div>
 
-                {employes.length && (
+                {employes.length > 0 && employesIds.length > 0 && (
                     <div className={classes.container}>
                         <DropdownList
                             data={employes}
+                            ids={employesIds}
                             isOpen={open}
                             index={index}
                             onSelect={onSelectHandler}

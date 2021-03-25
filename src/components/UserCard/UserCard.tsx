@@ -3,17 +3,18 @@ import classes from './userCard.module.scss'
 
 type Props = {
     user: {
-        _id: string
         name: string
         job: string
         salary: string
     }
+    id: string
     editHandler: (event: React.MouseEvent<HTMLParagraphElement>) => void
     removeHandler: (event: React.MouseEvent<HTMLParagraphElement>) => void
 }
 
 export const UserCard: React.FC<Props> = ({
     user,
+    id,
     editHandler,
     removeHandler,
 }) => {
@@ -41,13 +42,13 @@ export const UserCard: React.FC<Props> = ({
             <div className={classes.btns}>
                 <p
                     onClick={editHandler}
-                    data-id={user._id}
+                    data-id={id}
                     className={[classes.btn, classes.btnEdit].join(' ')}>
                     &#9998;
                 </p>
                 <p
                     onClick={removeHandler}
-                    data-id={user._id}
+                    data-id={id}
                     className={[classes.btn, classes.btnDel].join(' ')}>
                     &times;
                 </p>

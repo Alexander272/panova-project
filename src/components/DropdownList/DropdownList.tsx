@@ -3,11 +3,11 @@ import classes from './dropdownList.module.scss'
 
 type Props = {
     data: {
-        _id: string
         name: string
         job: string
         salary: string
     }[]
+    ids: string[]
     isOpen: boolean
     index: number
     onSelect: (event: React.MouseEvent<HTMLParagraphElement>) => void
@@ -16,6 +16,7 @@ type Props = {
 
 export const DropdownList: React.FC<Props> = ({
     data,
+    ids,
     index,
     isOpen,
     onSelect,
@@ -40,7 +41,7 @@ export const DropdownList: React.FC<Props> = ({
                 ].join(' ')}>
                 {data.map((d, index) => (
                     <p
-                        key={d._id}
+                        key={ids[index]}
                         data-index={index}
                         onClick={onSelect}
                         className={classes.item}>

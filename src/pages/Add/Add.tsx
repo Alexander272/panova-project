@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import React, { useState } from 'react'
 import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs'
 import { Button } from '../../components/Button/Button'
 import { Input } from '../../components/Input/Input'
-import classes from '../Add/add.module.scss'
-import { data } from '../data'
+import classes from './add.module.scss'
 
-export const EditPage = () => {
-    const { id } = useParams<{ id: string }>()
+export const AddPage = () => {
     const [form, setFrom] = useState({
         name: '',
         job: '',
@@ -15,20 +12,42 @@ export const EditPage = () => {
         award: '',
     })
 
-    useEffect(() => {
-        setFrom(data[+id])
-    }, [id])
-
     const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFrom({ ...form, [event.target.name]: event.target.value })
     }
 
-    const saveHandler = () => {}
+    const saveHandler = async () => {
+        if (
+            !(
+                form.name.trim() &&
+                form.job.trim() &&
+                form.salary.trim() &&
+                form.award.trim()
+            )
+        )
+            return
+        try {
+            const res = await fetch(
+                'https://alex-js.firebaseio.com/emploeys.json',
+                {
+                    method: 'POST',
+                    body: JSON.stringify(form),
+                }
+            )
+            await res.json()
+            setFrom({
+                name: '',
+                job: '',
+                salary: '',
+                award: '',
+            })
+        } catch (error) {}
+    }
 
     return (
         <div className={'container'}>
             <div className={'header'}>
-                <h1 className={'title'}>Редактировать сотрудника</h1>
+                <h1 className={'title'}>Добавить сотрудника</h1>
             </div>
 
             <div className={classes.form}>
@@ -38,7 +57,7 @@ export const EditPage = () => {
                             { link: '/', text: 'Главная' },
                             {
                                 link: '/employee/add',
-                                text: 'Редактировать сотрудника',
+                                text: 'Добавить сотрудника',
                             },
                         ]}
                     />
