@@ -3,6 +3,7 @@ import { useHistory } from 'react-router'
 import { Button } from '../../components/Button/Button'
 import { DropdownList } from '../../components/DropdownList/DropdownList'
 import { Input } from '../../components/Input/Input'
+import { Checkbox } from './../../components/Checkbox/Checkbox'
 import { EmploeysType } from '../../types/employes'
 import classes from './home.module.scss'
 // import { data } from '../data'
@@ -34,6 +35,7 @@ function getDaysInRange(start: Date, end: Date) {
 const initState = {
     salary: 0,
     award: 0,
+    children: 0,
     NDFL: 0,
     pension: 0,
     medical: 0,
@@ -44,11 +46,13 @@ const initState = {
 export const HomePage = () => {
     const history = useHistory()
     const [open, setOpen] = useState(false)
+    const [haveAChildren, setHaveAChildren] = useState(false)
     const [employes, setEmployes] = useState<EmploeysType[]>([])
     const [employesIds, setEmployesIds] = useState<string[]>([])
     const [index, setIndex] = useState(0)
     const [countWorkingDays, setCountWorkingDays] = useState(0)
     const [count, setCount] = useState('')
+    const [countChildren, setCountChildren] = useState('')
     const [calc, setCalc] = useState(initState)
 
     const fetchEmployes = useCallback(async () => {
@@ -70,6 +74,11 @@ export const HomePage = () => {
 
     const calculateHandler = () => {
         const fullSalary = (+employes[index].salary * +count) / countWorkingDays
+        let children = 0
+        for (let i = 0; i < +countChildren; i++) {
+            if (i < 2) children += 1400
+            else children += 3000
+        }
         const fullAward =
             +count === countWorkingDays
                 ? fullSalary * (+employes[index].award / 100)
@@ -79,7 +88,11 @@ export const HomePage = () => {
         setCalc({
             salary: fullSalary - fullSalary * 0.13,
             award: fullAward - fullAward * 0.13,
-            NDFL: fullSalary * 0.13 + fullAward * 0.13,
+            children,
+            NDFL:
+                fullSalary * 0.13 + fullAward * 0.13 - children > 0
+                    ? fullSalary * 0.13 + fullAward * 0.13 - children
+                    : 0,
             pension: fullSalary * 0.22 + fullAward * 0.22,
             medical: fullSalary * 0.051 + fullAward * 0.051,
             social: fullSalary * 0.029 + fullAward * 0.029,
@@ -100,9 +113,11 @@ export const HomePage = () => {
     }
 
     const onToggleHandler = () => setOpen((prev) => !prev)
+    const onSwitchHandler = () => setHaveAChildren((prev) => !prev)
 
     const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCount(event.target.value)
+        if (event.target.name === 'count') setCount(event.target.value)
+        else setCountChildren(event.target.value)
     }
 
     return (
@@ -188,6 +203,22 @@ export const HomePage = () => {
                             name="count"
                             onChange={changeHandler}
                         />
+                        <Checkbox
+                            id={'children'}
+                            name={'children'}
+                            checked={haveAChildren}
+                            text={'Использовать стандартный вычет на детей?'}
+                            onClick={onSwitchHandler}
+                        />
+                        {haveAChildren && (
+                            <Input
+                                type="number"
+                                placeholder="Количество детей"
+                                value={countChildren}
+                                name="countChildren"
+                                onChange={changeHandler}
+                            />
+                        )}
                     </div>
                 )}
 
@@ -208,6 +239,15 @@ export const HomePage = () => {
                                 currency: 'RUB',
                                 style: 'currency',
                             }).format(calc.award)}
+                        </span>
+                    </p>
+                    <p className={classes.infoText}>
+                        Сумма вычета за детей:{' '}
+                        <span className={classes.infoBold}>
+                            {new Intl.NumberFormat('ru-RU', {
+                                currency: 'RUB',
+                                style: 'currency',
+                            }).format(calc.children)}
                         </span>
                     </p>
                     <p className={classes.infoText}>

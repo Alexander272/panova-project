@@ -9,7 +9,13 @@ type Props = {
     onClick: () => void
 }
 
-export const Checkbox: React.FC<Props> = ({ id, name, checked, text, onClick }) => {
+export const Checkbox: React.FC<Props> = ({
+    id,
+    name,
+    checked,
+    text,
+    onClick,
+}) => {
     return (
         <div className={classes.container}>
             <input
@@ -18,6 +24,7 @@ export const Checkbox: React.FC<Props> = ({ id, name, checked, text, onClick }) 
                 id={id}
                 name={name}
                 checked={checked}
+                onChange={onClick}
             />
             <label className={classes.label} htmlFor={id} data-content={text}>
                 {text}
